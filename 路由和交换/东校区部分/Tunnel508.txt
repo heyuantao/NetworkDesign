@@ -172,7 +172,6 @@ line con 0
 line aux 0
 line vty 0 4
  privilege level 15
- password redhat19831122
  login local
  transport input telnet ssh
 !
