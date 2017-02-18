@@ -1,0 +1,162 @@
+Building configuration...
+
+
+Current configuration : 2342 bytes
+!
+version 15.1
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Tunnel509
+!
+boot-start-marker
+boot system flash:c2801-adventerprisek9-mz.151-4.M4.bin
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+dot11 syslog
+ip source-route
+!
+!
+!
+!
+!
+ip cef
+ip domain name 509.syslib.org
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+voice-card 0
+!
+crypto pki token default removal timeout 0
+!
+!
+!
+!
+license udi pid CISCO2801 sn FHK1423F1PU
+archive
+ log config
+  hidekeys
+username admin privilege 15 secret 5 $1$Abr5$a6oBD0fT4u/n8J1oCmyBc1
+!         
+redundancy
+!
+!
+ip ftp username share
+ip ftp password share
+! 
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 9.9.9.9 255.255.255.255
+!
+interface Tunnel3
+ ip address 172.16.3.1 255.255.255.0
+ keepalive 2 2
+ tunnel source FastEthernet0/0
+ tunnel destination 202.196.163.194
+!
+interface FastEthernet0/0
+ ip address 202.196.174.9 255.255.255.0
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ ip address 192.168.10.9 255.255.255.0
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface Serial0/3/0
+ no ip address
+ shutdown
+ clock rate 125000
+!
+interface Serial0/3/1
+ no ip address
+ shutdown
+ clock rate 125000
+!
+router ospf 200
+ router-id 9.9.9.9
+ network 192.168.10.0 0.0.0.255 area 0
+!
+router bgp 10
+ bgp router-id 9.9.9.9
+ bgp log-neighbor-changes
+ neighbor 172.16.3.2 remote-as 20
+ neighbor 192.168.10.1 remote-as 10
+ neighbor 192.168.10.1 next-hop-self
+ neighbor 192.168.10.3 remote-as 10
+ neighbor 192.168.10.3 next-hop-self
+ neighbor 192.168.10.8 remote-as 10
+ neighbor 192.168.10.8 next-hop-self
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip route 10.10.0.165 255.255.255.255 202.196.174.1
+ip route 202.196.163.0 255.255.255.0 202.196.174.1
+!
+!
+ip prefix-list anynet seq 10 permit 0.0.0.0/0 le 32
+!
+ip prefix-list sciencelib seq 10 permit 192.170.0.0/16 le 32
+!
+!
+!
+!
+route-map sciencelib permit 10
+ match ip address prefix-list sciencelib
+ set local-preference 150
+!
+route-map sciencelib permit 20
+ match ip address prefix-list anynet
+!
+!
+!
+control-plane
+!
+!
+!
+!
+mgcp profile default
+!
+!
+!
+!
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+ privilege level 15
+ password redhat19831122
+ login local
+ transport input telnet ssh
+!
+scheduler allocate 20000 1000
+end       

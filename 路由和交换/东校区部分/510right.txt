@@ -1,0 +1,252 @@
+!Software Version V200R003C00SPC300
+#
+sysname 510right
+#
+vlan batch 20 501 503 to 511
+#
+lacp priority 100
+#
+undo telnet server enable
+#
+undo nap slave enable
+#
+dhcp enable
+#
+dhcp server group dhcpserver
+ dhcp-server 192.168.20.14 0
+ dhcp-server 192.168.37.14 1
+#
+ip pool vlan1
+ gateway-list 192.168.15.1
+ network 192.168.15.0 mask 255.255.255.0
+ excluded-ip-address 192.168.15.2 192.168.15.99
+ excluded-ip-address 192.168.15.201 192.168.15.254
+ dns-list 192.168.20.15
+#                                         
+aaa
+ authentication-scheme default
+ authorization-scheme default
+ accounting-scheme default
+ domain default
+ domain default_admin
+ local-user admin password cipher %@%@g3*&=P45TL4ujnW-x(OY,Cwj%@%@
+ local-user admin privilege level 15
+ local-user admin service-type ssh
+#
+interface Vlanif1
+ ip address 192.168.15.1 255.255.255.0
+ dhcp select relay
+ dhcp relay server-select dhcpserver
+#
+interface Vlanif20
+ ip address 192.168.20.1 255.255.255.0
+ dhcp select relay
+ dhcp relay server-select dhcpserver
+#
+interface Vlanif501
+ ip address 192.168.1.1 255.255.255.128
+ dhcp select relay
+ dhcp relay server-select dhcpserver      
+#
+interface Vlanif503
+ ip address 192.168.3.1 255.255.255.0
+ dhcp select relay
+ dhcp relay server-select dhcpserver
+#
+interface Vlanif504
+ ip address 192.168.4.1 255.255.255.0
+ dhcp select relay
+ dhcp relay server-select dhcpserver
+#
+interface Vlanif505
+ ip address 192.168.5.1 255.255.255.0
+ dhcp select relay
+ dhcp relay server-select dhcpserver
+#
+interface Vlanif506
+ ip address 192.168.6.1 255.255.255.0
+ dhcp select relay
+ dhcp relay server-select dhcpserver
+#
+interface Vlanif507
+ ip address 192.168.7.1 255.255.255.0
+ dhcp select relay                        
+ dhcp relay server-select dhcpserver
+#
+interface Vlanif508
+ ip address 192.168.8.1 255.255.255.0
+ dhcp select relay
+ dhcp relay server-select dhcpserver
+#
+interface Vlanif509
+ ip address 192.168.9.1 255.255.255.0
+ dhcp select relay
+ dhcp relay server-select dhcpserver
+#
+interface Vlanif510
+ ip address 192.168.10.1 255.255.255.0
+ dhcp select relay
+ dhcp relay server-select dhcpserver
+#
+interface Vlanif511
+ ip address 192.168.11.1 255.255.255.0
+ dhcp select relay
+ dhcp relay server-select dhcpserver
+#
+interface MEth0/0/1
+#                                         
+interface Eth-Trunk1
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+ mode lacp
+ max bandwidth-affected-linknumber 2
+#
+interface GigabitEthernet0/0/1
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/2
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/3
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/4
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/5
+ port link-type trunk                     
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/6
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/7
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/8
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/9
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/10
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/11
+ port link-type trunk                     
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/12
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/13
+ port link-type access
+#
+interface GigabitEthernet0/0/14
+ port link-type access
+ port default vlan 510
+#
+interface GigabitEthernet0/0/15
+ port link-type access
+ port default vlan 510
+#
+interface GigabitEthernet0/0/16
+ port link-type access
+ port default vlan 510
+#
+interface GigabitEthernet0/0/17
+ port link-type access
+ port default vlan 510                    
+#
+interface GigabitEthernet0/0/18
+ port link-type access
+ port default vlan 510
+#
+interface GigabitEthernet0/0/19
+ port link-type access
+ port default vlan 510
+#
+interface GigabitEthernet0/0/20
+ port link-type access
+ port default vlan 510
+#
+interface GigabitEthernet0/0/21
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/22
+ port link-type trunk
+ port trunk allow-pass vlan 2 to 4094
+#
+interface GigabitEthernet0/0/23
+ eth-trunk 1
+ lacp priority 100                        
+#
+interface GigabitEthernet0/0/24
+ eth-trunk 1
+ lacp priority 100
+#
+interface NULL0
+#
+bgp 10
+ router-id 1.1.1.1
+ peer 192.168.10.3 as-number 10
+ peer 192.168.10.8 as-number 10
+ peer 192.168.10.9 as-number 10
+ #
+ ipv4-family unicast
+  undo synchronization
+  peer 192.168.10.3 enable
+  peer 192.168.10.8 enable
+  peer 192.168.10.9 enable
+#
+ospf 1
+#
+ospf 100
+ silent-interface Vlanif504
+ silent-interface Vlanif505               
+ silent-interface Vlanif506
+ silent-interface Vlanif507
+ silent-interface Vlanif508
+ silent-interface Vlanif509
+ silent-interface Vlanif511
+ silent-interface Vlanif503
+ area 0.0.0.0
+  network 192.168.1.0 0.0.0.255
+  network 192.168.3.0 0.0.0.255
+  network 192.168.4.0 0.0.0.255
+  network 192.168.5.0 0.0.0.255
+  network 192.168.6.0 0.0.0.255
+  network 192.168.7.0 0.0.0.255
+  network 192.168.8.0 0.0.0.255
+  network 192.168.9.0 0.0.0.255
+  network 192.168.10.0 0.0.0.255
+  network 192.168.11.0 0.0.0.255
+  network 192.168.15.0 0.0.0.255
+  network 192.168.20.0 0.0.0.255
+#
+stelnet server enable
+ssh user admin
+ssh user admin authentication-type password
+ssh user admin service-type all           
+#
+user-interface con 0
+ authentication-mode password
+ set authentication password cipher %@%@/fgd>'x!'9+SZMSg}*d;,"=}Qi[q)yh`{'"2+(<]Imd0"=#,%@%@
+ idle-timeout 0 0
+user-interface vty 0 4
+ authentication-mode aaa
+ protocol inbound ssh
+user-interface vty 16 20
+#
+return
