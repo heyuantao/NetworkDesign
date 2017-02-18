@@ -1,0 +1,277 @@
+!
+no service password-encryption
+!
+hostname DCWS-6002
+sysLocation China
+sysContact 800-810-9119
+!
+username admin privilege 15 password 0 19831122
+!
+authentication line console login local
+aaa authorization config-commands
+!
+!
+!
+!
+telnet-server max-connection 10
+!
+!
+!
+!
+vlan 1 
+!
+router-id 192.168.15.10
+!
+Interface Ethernet1/0/1
+!
+Interface Ethernet1/0/2
+!
+interface Vlan1
+ ip address 192.168.15.10 255.255.255.0
+!
+interface Loopback1
+!
+router ospf 100
+ network 192.168.15.0 0.0.0.255 area 0
+!
+!
+no login
+wireless
+ no auto-ip-assign
+ enable
+ ap authentication none
+ static-ip  192.168.15.10
+ network 1
+  hide-ssid
+  security mode wpa-enterprise
+  ssid Managed SSID 1
+!
+ network 2
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 3
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 4
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 5
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 6
+  hide-ssid
+  security mode wpa-enterprise
+!         
+ network 7
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 8
+  hide-ssid
+  security mode wpa-personal
+!
+ network 9
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 10
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 11
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 12
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 13
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 14
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 15
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 16
+  hide-ssid
+  security mode wpa-enterprise
+!
+ network 100
+  security mode wpa-personal
+  ssid 08A501
+  vlan 501
+  wpa key encrypted 2387903700859b17d7d38eb1d3d359b52c259dd0b42d186598869c370acb91d7e00d702f78b1cb148e008c695be09667b444b82b2da515290d1a6998043e0354
+!
+ network 101
+  security mode wpa-personal
+  ssid 08A503
+  vlan 503
+  wpa key encrypted 7e8614569b3c04be32b951a57df6fbf75999f3ff73789182ddffdaa5cde7b6d7293cd44f15f0cdec4cff3cce7f1deee9f7e5c4a49d633b4f37d07f97ffde98a6
+!
+ network 102
+  security mode wpa-personal
+  ssid CollegeOfComputerScience
+  vlan 503
+  wpa key encrypted 7e8614569b3c04be32b951a57df6fbf75999f3ff73789182ddffdaa5cde7b6d7293cd44f15f0cdec4cff3cce7f1deee9f7e5c4a49d633b4f37d07f97ffde98a6
+!
+ network 103
+  security mode wpa-personal
+  ssid 08A505
+  vlan 505
+  wpa key encrypted 7e8614569b3c04be32b951a57df6fbf75999f3ff73789182ddffdaa5cde7b6d7293cd44f15f0cdec4cff3cce7f1deee9f7e5c4a49d633b4f37d07f97ffde98a6
+!
+ network 104
+  security mode wpa-personal
+  ssid 08A509
+  vlan 509
+  wpa key encrypted 7e8614569b3c04be32b951a57df6fbf75999f3ff73789182ddffdaa5cde7b6d7293cd44f15f0cdec4cff3cce7f1deee9f7e5c4a49d633b4f37d07f97ffde98a6
+!
+ ap load-balance template 1
+!
+ ap profile 1
+  name Default
+  hwtype 7
+  radio 1
+   dot11n channel-bandwidth 20
+   vap 0
+!
+!
+  radio 2
+   dot11n channel-bandwidth 40
+   vap 0
+!
+!
+!
+ ap profile 2
+  name EastWireless
+  hwtype 7
+  radio 1
+   dot11n channel-bandwidth 20
+   vap 0
+    network 100
+!
+   vap 1
+    enable
+    network 101
+!
+   vap 2
+    enable
+    network 102
+!         
+   vap 3
+    enable
+    network 103
+!
+   vap 4
+    enable
+    network 104
+!
+!
+  radio 2
+   dot11n channel-bandwidth 40
+   vap 0
+    network 100
+!
+   vap 1
+    enable
+    network 101
+!
+   vap 2
+    enable
+    network 102
+!
+   vap 3
+    enable
+    network 103
+!
+   vap 4
+    enable
+    network 104
+!
+!
+!
+ ap profile 3
+  name EastSpecial
+  hwtype 14
+  radio 1
+   dot11n channel-bandwidth 20
+   vap 0
+    network 100
+!
+   vap 1
+    enable
+    network 101
+!
+   vap 2
+    enable
+    network 102
+!
+!
+  radio 2
+   dot11n channel-bandwidth 40
+   vap 0
+    network 100
+!
+   vap 1
+    enable
+    network 101
+!
+   vap 2
+    enable
+    network 102
+!
+!
+!
+ ap database 00-03-0f-19-71-e0
+  profile 3
+!
+ ap database 00-03-0f-21-65-60
+  profile 2
+!
+ ap database 00-03-0f-21-68-80
+  profile 2
+!
+ ap database 00-03-0f-21-bd-c0
+  profile 2
+!
+ ap database 00-03-0f-21-ca-a0
+  profile 2
+!
+ ap database 00-03-0f-21-cd-60
+  profile 2
+!
+ ap database 00-03-0f-21-cd-80
+  profile 2
+!
+ ap database 00-03-0f-21-ce-20
+  profile 2
+!
+ ap database 00-03-0f-21-de-20
+  profile 2
+!
+ ap database 00-03-0f-21-e2-60
+  profile 2
+!
+ ap database 00-03-0f-21-e3-c0
+  profile 2
+!
+ ap database 00-03-0f-22-06-c0
+  profile 2
+!
+ ap database 00-03-0f-22-10-80
+  profile 2
+!
+!
+captive-portal
+!
+end

@@ -1,0 +1,180 @@
+Building configuration...
+
+
+Current configuration : 2912 bytes
+!
+version 15.1
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Tunnel508
+!
+boot-start-marker
+boot system flash:c2801-adventerprisek9-mz.151-4.M4.bin
+boot-end-marker
+!
+!
+enable secret 4 gs5UYKtt8v5Equsq73syrQHHky0J01VE3unda.LAEjE
+enable password cisco
+!
+no aaa new-model
+!
+dot11 syslog
+ip source-route
+!
+!
+!
+!
+!
+ip cef
+ip domain name 508.syslib.org
+ip name-server 202.196.160.3
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+voice-card 0
+!
+crypto pki token default removal timeout 0
+!
+!
+!
+!
+license udi pid CISCO2801 sn FHK1423F1PN
+archive
+ log config
+  hidekeys
+username admin privilege 15 secret 5 $1$YPja$6m4OtvF9uFDAIDJEG.Bje0
+!
+redundancy
+!
+!
+ip ftp username share
+ip ftp password share
+ip ssh version 1
+! 
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 8.8.8.8 255.255.255.255
+!
+interface Tunnel1
+ ip address 172.16.1.1 255.255.255.0
+ no ip redirects
+ ip mtu 1300
+ keepalive 2 2
+ tunnel source FastEthernet0/0
+ tunnel destination 202.196.163.199
+!
+interface Tunnel2
+ ip address 172.16.2.1 255.255.255.0
+ keepalive 2 2
+ tunnel source FastEthernet0/0
+ tunnel destination 202.196.166.180
+!
+interface FastEthernet0/0
+ ip address 202.196.174.8 255.255.255.0
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ ip address 192.168.10.8 255.255.255.0
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface Serial0/3/0
+ no ip address
+ shutdown
+ clock rate 125000
+!
+interface Serial0/3/1
+ no ip address
+ shutdown
+ clock rate 125000
+!
+router ospf 200
+ router-id 8.8.8.8
+ network 192.168.10.0 0.0.0.255 area 0
+!
+router bgp 10
+ bgp router-id 8.8.8.8
+ bgp log-neighbor-changes
+ bgp redistribute-internal
+ aggregate-address 192.168.0.0 255.255.224.0 summary-only
+ redistribute ospf 200 route-map myfilter
+ neighbor 172.16.1.2 remote-as 20
+ neighbor 172.16.2.2 remote-as 30
+ neighbor 192.168.10.1 remote-as 10
+ neighbor 192.168.10.1 next-hop-self
+ neighbor 192.168.10.3 remote-as 10
+ neighbor 192.168.10.3 next-hop-self
+ neighbor 192.168.10.9 remote-as 10
+ neighbor 192.168.10.9 next-hop-self
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip dns server
+ip route 10.10.0.165 255.255.255.255 202.196.174.1
+ip route 202.196.163.0 255.255.255.0 202.196.174.1
+ip route 202.196.166.180 255.255.255.255 202.196.174.1
+!
+!
+ip prefix-list local_net seq 5 permit 192.168.0.0/16 ge 17
+!
+ip prefix-list remote_net seq 5 permit 192.169.0.0/16 ge 17
+ip prefix-list remote_net seq 10 permit 192.170.0.0/16 ge 17
+!
+!
+!
+!
+route-map myfilter permit 10
+ match ip address prefix-list local_net
+!
+route-map bgp_to_ospf permit 10
+ match ip address prefix-list remote_net
+!
+!
+!
+control-plane
+!
+!
+!         
+!
+mgcp profile default
+!
+!
+!
+!
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+ privilege level 15
+ password redhat19831122
+ login local
+ transport input telnet ssh
+!
+scheduler allocate 20000 1000
+end

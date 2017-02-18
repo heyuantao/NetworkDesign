@@ -1,0 +1,510 @@
+Running configuration:
+!
+Version 4.0
+
+ip vrouter "trust-vr"
+exit
+
+aaa-server "local" type local
+exit
+
+admin user "admin"
+  password 17u57egMe2mda1E6wUmw0B8wUe
+  privilege RXW
+  access console
+  access telnet
+  access ssh
+  access http
+  access https
+exit
+
+hostname "gateway"
+admin host any any
+no logging traffic to buffer
+no logging network on
+no logging network to console
+no logging network to buffer
+vswitch "vswitch1"
+exit
+
+interface vswitchif1
+exit
+
+interface ethernet0/0
+exit
+
+interface ethernet0/1
+exit
+
+interface ethernet0/2
+exit
+
+interface ethernet0/3
+exit
+
+interface ethernet0/4
+exit
+
+interface loopback1
+exit
+
+service "示范中心"
+  tcp dst-port 8080 application "HTTP" timeout 1800
+exit
+          
+servgroup "libbase"
+exit
+
+servgroup "libbase"
+  description "ban"
+  service "DNS"
+  service "FTP"
+  service "HTTP"
+  service "HTTPS"
+  service "ICMP"
+  service "PING"
+  service "NTP"
+  service "SIP"
+  service "SSH"
+  service "TELNET"
+  service "POP3"
+exit
+
+qos-profile "prof_ip_ethernet0/1_output" ip-qos-profile
+exit
+
+qos-profile "prof_ip_ethernet0/1_input" ip-qos-profile
+exit
+
+class-map "机房限速"
+  match ip-range 192.168.0.1 192.168.0.255
+  match ip-range 192.168.6.1 192.168.6.255
+  match ip-range 192.168.8.1 192.168.8.255
+  match ip-range 192.168.9.1 192.168.9.255
+  match ip-range 192.168.5.1 192.168.5.255
+  match ip-range 192.168.3.1 192.168.3.255
+exit
+
+class-map "卓越班限速"
+  match ip-range 192.168.11.1 192.168.11.255
+exit
+
+qos-profile "prof_ip_ethernet0/1_output" ip-qos-profile
+  class "机房限速"
+    disable
+    no flex-qos
+    ip-qos per-ip max-bandwidth 512
+    match-priority 1
+  exit
+
+  class "卓越班限速"
+    disable
+    no flex-qos
+    ip-qos per-ip max-bandwidth 512
+    match-priority 2
+  exit
+          
+exit
+
+qos-profile "prof_ip_ethernet0/1_input" ip-qos-profile
+  class "机房限速"
+    disable
+    no flex-qos
+    ip-qos per-ip max-bandwidth 512
+    match-priority 1
+  exit
+
+  class "卓越班限速"
+    disable
+    no flex-qos
+    ip-qos per-ip max-bandwidth 512
+    match-priority 2
+  exit
+
+exit
+
+urlfilter unlimit-ip 192.168.30.1 192.168.30.255 vr trust-vr
+urlfilter unlimit-ip 192.168.11.1 192.168.11.255 vr trust-vr
+urlfilter unlimit-ip 192.168.20.1 192.168.20.255 vr trust-vr
+urlfilter unlimit-ip
+urlfilter whitelist-only
+contentfilter
+exit
+
+http-profile "考试屏蔽网站配置"
+  urlfilter
+exit
+
+profile-group "考试屏蔽网站配置组"
+  add http "考试屏蔽网站配置"
+exit
+
+zone "trust"
+exit
+
+zone "untrust"
+  type wan
+  ad tear-drop
+  ad ip-spoofing
+  ad land-attack
+  ad ip-option
+  ad ip-option action alarm
+  ad ip-fragment
+  ad winnuke
+  ad port-scan
+  ad syn-flood
+  ad icmp-flood
+  ad ip-sweep
+  ad ping-of-death
+  ad udp-flood
+  ad ip-directed-broadcast
+exit
+
+zone "dmz"
+exit
+
+zone "l2-trust" l2
+exit
+
+zone "l2-untrust" l2
+  type wan
+exit
+
+zone "l2-dmz" l2
+exit
+
+zone "VPNHub"
+exit
+
+zone "HA"
+exit
+
+address "labs"
+  reference-zone "trust"
+  description "labs"
+  range 192.168.10.1 192.168.10.255
+  range 192.168.0.1 192.168.0.255
+  range 192.168.8.1 192.168.8.255
+  range 192.168.6.1 192.168.6.255
+  range 192.168.11.1 192.168.11.255
+  range 192.168.20.1 192.168.20.255
+  range 192.168.30.1 192.168.30.255
+  range 192.168.9.1 192.168.9.255
+  range 192.168.5.1 192.168.5.255
+  range 192.168.3.1 192.168.3.255
+  range 192.168.4.1 192.168.4.255
+exit
+
+address "外网"
+  reference-zone "untrust"
+  description "outside"
+  ip 202.196.174.10/32
+  ip 202.196.174.11/32
+  ip 202.196.174.3/32
+exit
+
+address "office"
+  reference-zone "trust"
+  description "labs"
+  range 192.168.1.1 192.168.1.254
+exit      
+
+address "外网2"
+  reference-zone "untrust"
+  description "outside"
+  ip 202.196.174.65/32
+exit
+
+pki trust-domain "trust_domain_default"
+  keypair "Default-Key"
+  enrollment self
+  subject commonName "DCFW-1800"
+  subject organization "DigitalChina Networks Limited"
+exit
+
+pki trust-domain "trust_domain_ssl_proxy"
+  keypair "Default-Key"
+  enrollment self
+  subject commonName "DCFW-1800"
+  subject organization "DigitalChina Networks Limited"
+exit
+
+pki trust-domain "network_manager_ca"
+  enrollment terminal
+exit
+
+isakmp proposal "psk-md5-des-g2"
+  hash md5
+  encryption des
+exit
+
+isakmp proposal "psk-md5-3des-g2"
+  hash md5
+exit
+
+isakmp proposal "psk-md5-aes128-g2"
+  hash md5
+  encryption aes
+exit
+
+isakmp proposal "psk-md5-aes256-g2"
+  hash md5
+  encryption aes-256
+exit
+
+isakmp proposal "psk-sha-des-g2"
+  encryption des
+exit
+
+isakmp proposal "psk-sha-3des-g2"
+exit
+
+isakmp proposal "psk-sha-aes128-g2"
+  encryption aes
+exit
+
+isakmp proposal "psk-sha-aes256-g2"
+  encryption aes-256
+exit
+
+isakmp proposal "rsa-md5-des-g2"
+  authentication rsa-sig
+  hash md5
+  encryption des
+exit
+
+isakmp proposal "rsa-md5-3des-g2"
+  authentication rsa-sig
+  hash md5
+exit
+
+isakmp proposal "rsa-md5-aes128-g2"
+  authentication rsa-sig
+  hash md5
+  encryption aes
+exit
+
+isakmp proposal "rsa-md5-aes256-g2"
+  authentication rsa-sig
+  hash md5
+  encryption aes-256
+exit
+
+isakmp proposal "rsa-sha-des-g2"
+  authentication rsa-sig
+  encryption des
+exit
+
+isakmp proposal "rsa-sha-3des-g2"
+  authentication rsa-sig
+exit
+
+isakmp proposal "rsa-sha-aes128-g2"
+  authentication rsa-sig
+  encryption aes
+exit
+
+isakmp proposal "rsa-sha-aes256-g2"
+  authentication rsa-sig
+  encryption aes-256
+exit
+
+isakmp proposal "dsa-sha-des-g2"
+  authentication dsa-sig
+  encryption des
+exit
+
+isakmp proposal "dsa-sha-3des-g2"
+  authentication dsa-sig
+exit
+
+isakmp proposal "dsa-sha-aes128-g2"
+  authentication dsa-sig
+  encryption aes
+exit
+
+isakmp proposal "dsa-sha-aes256-g2"
+  authentication dsa-sig
+  encryption aes-256
+exit
+
+ipsec proposal "esp-md5-des-g2"
+  hash md5
+  encryption des
+  group 2
+exit
+
+ipsec proposal "esp-md5-des-g0"
+  hash md5
+  encryption des
+exit
+
+ipsec proposal "esp-md5-3des-g2"
+  hash md5
+  encryption 3des
+  group 2
+exit
+
+ipsec proposal "esp-md5-3des-g0"
+  hash md5
+  encryption 3des
+exit
+
+ipsec proposal "esp-md5-aes128-g2"
+  hash md5
+  encryption aes
+  group 2
+exit
+
+ipsec proposal "esp-md5-aes128-g0"
+  hash md5
+  encryption aes
+exit
+
+ipsec proposal "esp-md5-aes256-g2"
+  hash md5
+  encryption aes-256
+  group 2
+exit
+
+ipsec proposal "esp-md5-aes256-g0"
+  hash md5
+  encryption aes-256
+exit
+
+ipsec proposal "esp-sha-des-g2"
+  hash sha
+  encryption des
+  group 2
+exit
+
+ipsec proposal "esp-sha-des-g0"
+  hash sha
+  encryption des
+exit
+
+ipsec proposal "esp-sha-3des-g2"
+  hash sha
+  encryption 3des
+  group 2
+exit
+
+ipsec proposal "esp-sha-3des-g0"
+  hash sha
+  encryption 3des
+exit
+
+ipsec proposal "esp-sha-aes128-g2"
+  hash sha
+  encryption aes
+  group 2
+exit
+
+ipsec proposal "esp-sha-aes128-g0"
+  hash sha
+  encryption aes
+exit
+
+ipsec proposal "esp-sha-aes256-g2"
+  hash sha
+  encryption aes-256
+  group 2
+exit
+
+ipsec proposal "esp-sha-aes256-g0"
+  hash sha
+  encryption aes-256
+exit
+          
+interface ethernet0/0
+  zone  "trust"
+  ip address 192.168.10.2 255.255.255.0
+  manage ssh
+  manage telnet
+  manage ping
+  manage snmp
+  manage http
+  manage https
+exit
+
+interface ethernet0/1
+  zone  "untrust"
+  ip address 202.196.174.10 255.255.255.0
+  qos-profile 2nd-level input "prof_ip_ethernet0/1_input"
+  qos-profile 2nd-level output "prof_ip_ethernet0/1_output"
+  manage ssh
+  manage ping
+exit
+
+interface ethernet0/2
+  manage ping
+exit
+
+interface loopback1
+  zone  "trust"
+  ip address 10.10.10.10 255.255.255.255
+  manage ssh
+  manage telnet
+  manage ping
+exit
+
+ip vrouter "trust-vr"
+  snatrule id 1 from "labs" to "Any" eif ethernet0/1 trans-to address-book "外网" mode dynamicport 
+  snatrule id 2 from "office" to "Any" eif ethernet0/1 trans-to address-book "外网2" mode dynamicport 
+  ip route 0.0.0.0/0 202.196.174.1 250
+  router ospf
+    router-id 10.10.10.10
+    default-information originate
+    network 192.168.10.0/24 area 0.0.0.0
+  exit
+
+exit
+
+no ip domain lookup
+ip name-server 202.196.160.3 
+policy from "trust" to "untrust"
+  rule id 1
+    action permit
+    src-addr "Any"
+    dst-addr "Any"
+    service "Any"
+  exit
+
+exit
+
+policy from "trust" to "trust"
+  rule id 3
+    action permit
+    src-addr "Any"
+    dst-addr "Any"
+    service "Any"
+  exit
+
+exit
+
+policy from "untrust" to "trust"
+  rule id 2
+    action permit
+    src-addr "Any"
+    dst-addr "Any"
+    service "Any"
+  exit
+
+exit
+
+no tcp-syn-check
+l2-nonip-action drop
+ecmp-route-select by-src-and-dst
+strict-tunnel-check
+statistics-set "predef_bw_user"
+  target-data bandwidth record-history
+  group-by user directional
+exit
+
+statistics-set "predef_sess_user"
+  target-data session record-history
+  group-by user
+exit
+
+
+end
