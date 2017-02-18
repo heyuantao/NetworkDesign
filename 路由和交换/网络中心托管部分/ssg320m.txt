@@ -1,0 +1,163 @@
+Total Config size 5657:
+set clock timezone 0
+set vrouter trust-vr sharable
+set vrouter "untrust-vr"
+exit
+set vrouter "trust-vr"
+unset auto-route-export
+exit
+set alg appleichat enable
+unset alg appleichat re-assembly enable
+set alg sctp enable
+set auth-server "Local" id 0
+set auth-server "Local" server-name "Local"
+set auth default auth server "Local"
+set auth radius accounting port 1646
+set admin name "netscreen"
+set admin password "nO//D7rvNc1GcJuK+sNKfbAtJELjun"
+set admin user "admin" password "nG1BEErRHxPJctlLYsCNJhLtARJRAn" privilege "all"
+set admin port 8080
+set admin auth web timeout 10
+set admin auth server "Local"
+set admin format dos
+set zone "Trust" vrouter "trust-vr"
+set zone "Untrust" vrouter "trust-vr"
+set zone "DMZ" vrouter "trust-vr"
+set zone "VLAN" vrouter "trust-vr"
+set zone "Untrust-Tun" vrouter "trust-vr"
+set zone "Trust" tcp-rst 
+set zone "Untrust" block 
+unset zone "Untrust" tcp-rst 
+set zone "MGT" block 
+set zone "DMZ" tcp-rst 
+set zone "VLAN" block 
+unset zone "VLAN" tcp-rst 
+set zone "Untrust" screen tear-drop
+set zone "Untrust" screen syn-flood
+set zone "Untrust" screen ping-death
+set zone "Untrust" screen ip-filter-src
+set zone "Untrust" screen land
+set zone "V1-Untrust" screen tear-drop
+set zone "V1-Untrust" screen syn-flood
+set zone "V1-Untrust" screen ping-death
+set zone "V1-Untrust" screen ip-filter-src
+set zone "V1-Untrust" screen land
+set interface "ethernet0/0" zone "Trust"
+set interface "ethernet0/1" zone "Trust"
+set interface "ethernet0/2" zone "Trust"
+set interface "ethernet0/3" zone "Untrust"
+set interface "tunnel.2" zone "Trust"
+set interface "tunnel.4" zone "Trust"
+set interface ethernet0/0 ip 192.168.33.1/24
+set interface ethernet0/0 nat
+unset interface vlan1 ip
+set interface ethernet0/2 ip 192.168.34.1/24
+set interface ethernet0/2 nat
+set interface ethernet0/3 ip 202.196.166.180/25
+set interface ethernet0/3 nat
+set interface tunnel.2 ip 172.16.2.2/24
+set interface tunnel.2 tunnel encap gre
+set interface tunnel.2 tunnel local-if ethernet0/3 dst-ip 202.196.174.8
+set interface tunnel.2 tunnel keep-alive interval 2 threshold 2
+set interface tunnel.4 ip 172.16.4.2/24
+set interface tunnel.4 tunnel encap gre
+set interface tunnel.4 tunnel local-if ethernet0/3 dst-ip 202.196.163.194
+set interface tunnel.4 tunnel keep-alive interval 2 threshold 2
+set interface tunnel.2 mtu 1500
+set interface tunnel.4 mtu 1500
+set interface "ethernet0/0" pmtu ipv4
+set interface "ethernet0/3" pmtu ipv4
+set interface ethernet0/0 proxy dns
+unset interface vlan1 bypass-others-ipsec
+unset interface vlan1 bypass-non-ip
+set interface ethernet0/0 ip manageable
+set interface ethernet0/2 ip manageable
+set interface ethernet0/3 ip manageable
+unset interface ethernet0/0 g-arp
+unset interface ethernet0/1 manage snmp
+unset interface ethernet0/1 g-arp
+unset interface ethernet0/2 manage snmp
+unset interface ethernet0/2 g-arp
+set interface ethernet0/3 manage ping
+set interface ethernet0/3 manage ssh
+set interface ethernet0/3 manage ssl
+set interface ethernet0/3 vip 202.196.166.181 80 "HTTP" 192.168.33.16
+set interface ethernet0/3 vip 202.196.166.181 + 443 "HTTPS" 192.168.33.17
+set interface ethernet0/3 vip interface-ip 80 "HTTP" 192.168.33.14
+unset flow no-tcp-seq-check
+set flow tcp-syn-check
+unset flow tcp-syn-bit-check
+set flow reverse-route clear-text prefer
+set flow reverse-route tunnel always
+set pki authority default scep mode "auto"
+set pki x509 default cert-path partial
+set dns host dns1 202.196.160.3 src-interface ethernet0/3
+set dns host dns2 0.0.0.0
+set dns host dns3 0.0.0.0
+set ike respond-bad-spi 1
+set ike ikev2 ike-sa-soft-lifetime 60
+unset ike ikeid-enumeration
+unset ike dos-protection
+unset ipsec access-session enable
+set ipsec access-session maximum 5000
+set ipsec access-session upper-threshold 0
+set ipsec access-session lower-threshold 0
+set ipsec access-session dead-p2-sa-timeout 0
+unset ipsec access-session log-error
+unset ipsec access-session info-exch-connected
+unset ipsec access-session use-error-log
+set vrouter "untrust-vr"
+exit
+set vrouter "trust-vr"
+exit
+set url protocol websense
+exit
+set policy id 1 name "OUT" from "Trust" to "Untrust"  "Any" "Any" "ANY" permit 
+set policy id 1
+exit
+set policy id 2 from "Trust" to "Trust"  "Any" "Any" "ANY" permit 
+set policy id 2
+exit
+set policy id 3 from "Untrust" to "Trust"  "Any" "Any" "ANY" permit 
+set policy id 3
+exit
+set policy id 4 from "Untrust" to "Trust"  "Any" "VIP(202.196.166.181)" "ANY" permit 
+set policy id 4
+exit
+set policy id 5 name "R-Desktop" from "Untrust" to "Trust"  "Any" "VIP(ethernet0/3)" "ANY" permit 
+set policy id 5
+exit
+set nsmgmt bulkcli reboot-timeout 60
+set ssh version v2
+set ssh enable
+set config lock timeout 5
+unset license-key auto-update
+set snmp port listen 161
+set snmp port trap 162
+set vrouter "untrust-vr"
+exit
+set vrouter "trust-vr"
+set source-routing enable
+set protocol bgp 30
+set enable
+unset synchronization
+set neighbor 172.16.4.1 remote-as 20 local-ip 172.16.4.2/24 outgoing-interface tunnel.4
+set neighbor 172.16.4.1 enable
+set neighbor 172.16.2.1 remote-as 10 local-ip 172.16.2.2/24 outgoing-interface tunnel.2
+set neighbor 172.16.2.1 enable
+set network 192.168.32.0/22 no-check
+exit
+set access-list 1
+set access-list 1 permit ip 0.0.0.0/0 10
+set route-map name "bgp2ospf" permit 10
+set match ip 1
+exit
+unset add-default-route
+set route 0.0.0.0/0 interface ethernet0/3 gateway 202.196.166.129
+exit
+set interface tunnel.2 protocol bgp
+set interface tunnel.4 protocol bgp
+set vrouter "untrust-vr"
+exit
+set vrouter "trust-vr"
+exit

@@ -1,0 +1,196 @@
+
+#
+ version 5.20, ESS 3703P06
+#
+ sysname H3C
+#
+ clock timezone UTC add 00:00:00 
+#
+ domain default enable system 
+#
+ dns server 192.168.37.15 
+#
+ telnet server enable 
+#
+ port-security enable 
+#
+ wlan client learn-ipaddr enable
+#
+ wlan auto-ap enable
+ wlan auto-persistent enable
+#
+ password-recovery enable
+#
+vlan 1
+#
+vlan 301
+#
+vlan 415
+#
+domain system 
+ access-limit disable
+ state active 
+ idle-cut disable 
+ self-service-url disable 
+#
+user-group system
+ group-attribute allow-guest
+#
+local-user admin
+ password cipher $c$3$7mLE7A4/gNItCW1XWA3g2qI50alMB24rPzwc
+ authorization-attribute level 3
+ service-type ssh telnet
+ service-type web
+#
+wlan rrm
+ dot11a mandatory-rate 6 12 24 
+ dot11a supported-rate 9 18 36 48 54 
+ dot11b mandatory-rate 1 2 
+ dot11b supported-rate 5.5 11 
+ dot11g mandatory-rate 1 2 5.5 11 
+ dot11g supported-rate 6 9 12 18 24 36 48 54 
+#
+wlan service-template 1 crypto
+ ssid PRIS
+ bind WLAN-ESS 1
+ cipher-suite ccmp
+ security-ie rsn
+ service-template enable
+#
+wlan service-template 2 crypto
+ ssid SoftwareCollege
+ bind WLAN-ESS 2
+ cipher-suite ccmp
+ security-ie rsn
+ service-template enable
+#
+wlan ap-group default_group
+ ap 50da-00b5-0bb0
+ ap 600b-0333-e520
+ ap 600b-033c-bd20
+ ap 600b-033c-c2f0
+ dot11a service-template 1 
+ dot11a service-template 2 
+ dot11bg service-template 1 
+ dot11bg service-template 2 
+ dot11a radio enable
+ dot11bg radio enable
+#
+interface NULL0
+#
+interface Vlan-interface1
+ ip address 192.168.39.100 255.255.255.0 
+#
+interface GigabitEthernet1/0/5
+ port link-mode route
+#
+interface GigabitEthernet1/0/1
+ port link-mode bridge
+#
+interface GigabitEthernet1/0/2
+ port link-mode bridge
+#
+interface GigabitEthernet1/0/3
+ port link-mode bridge
+#
+interface GigabitEthernet1/0/4
+ port link-mode bridge
+ port link-type trunk
+ port trunk permit vlan all
+ dhcp-snooping trust
+#
+interface WLAN-ESS0
+ port link-type hybrid
+ port hybrid vlan 1 untagged
+#
+interface WLAN-ESS1
+ port access vlan 301
+ port-security port-mode psk 
+ port-security tx-key-type 11key 
+ port-security preshared-key pass-phrase cipher $c$3$qMHT0LoqyRWBNM+NuncuoRb+PBz5eDGUw6TZ
+#
+interface WLAN-ESS2
+ port access vlan 415
+ port-security port-mode psk 
+ port-security tx-key-type 11key 
+ port-security preshared-key pass-phrase cipher $c$3$0X7gWFI7FOSOABOktF39dqg4zoWTT2kna7tR
+#
+wlan ap 50da-00b5-0bb0 model WAP621 id 1
+ serial-id 219801A0Q59161Q00534
+ country-code CN
+ radio 1 
+  service-template 1
+  service-template 2
+  radio enable
+#
+wlan ap 600b-0333-e520 model WAP621 id 6
+ serial-id 219801A0Q49167Q00319
+ radio 1 
+  service-template 1
+  service-template 2
+  radio enable
+#
+wlan ap 600b-033c-bd20 model WAP621 id 4
+ serial-id 219801A0Q59167Q00040
+ country-code CN
+ radio 1 
+  service-template 1
+  service-template 2
+  radio enable
+#
+wlan ap 600b-033c-c2f0 model WAP621 id 3
+ serial-id 219801A0Q59167Q00133
+ country-code CN
+ radio 1 
+  service-template 1
+  service-template 2
+  radio enable
+#
+wlan ips
+ malformed-detect-policy default
+ signature deauth_flood signature-id 1
+ signature broadcast_deauth_flood signature-id 2
+ signature disassoc_flood signature-id 3
+ signature broadcast_disassoc_flood signature-id 4
+ signature eapol_logoff_flood signature-id 5
+ signature eap_success_flood signature-id 6
+ signature eap_failure_flood signature-id 7
+ signature pspoll_flood signature-id 8
+ signature cts_flood signature-id 9
+ signature rts_flood signature-id 10
+ signature addba_req_flood signature-id 11
+ signature-policy default
+ countermeasure-policy default
+ attack-detect-policy default
+ virtual-security-domain default
+  attack-detect-policy default
+  malformed-detect-policy default
+  signature-policy default
+  countermeasure-policy default
+#
+ dhcp-snooping
+#
+ ip route-static 0.0.0.0 0.0.0.0 192.168.39.1
+#
+ snmp-agent
+ snmp-agent local-engineid 800063A203600B03143429
+ snmp-agent community read public 
+ snmp-agent community write private 
+ snmp-agent sys-info version all
+#
+ dhcp enable 
+#
+ ntp-service refclock-master 2
+#
+ ssh server enable
+ ssh user admin service-type stelnet authentication-type password
+#
+ load xml-configuration 
+#
+user-interface con 0
+user-interface vty 0 4
+ authentication-mode scheme
+ user privilege level 3
+ protocol inbound ssh
+#
+return

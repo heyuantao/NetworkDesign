@@ -1,0 +1,193 @@
+Building configuration...
+
+Current configuration : 4476 bytes
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname rjxy-server-switch
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$keW3$IcccGOxp0dIFvn/p0rpp70
+!
+username admin privilege 15 secret 5 $1$MVOS$7caoM9ZlDTmC1VMz0yhGy0
+aaa new-model
+!
+!
+!
+!
+!
+aaa session-id common
+system mtu routing 1500
+ip subnet-zero
+ip domain-name syslab.org
+!
+!
+!
+crypto pki trustpoint TP-self-signed-330428160
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-330428160
+ revocation-check none
+ rsakeypair TP-self-signed-330428160
+!
+!
+crypto pki certificate chain TP-self-signed-330428160
+ certificate self-signed 01
+  30820253 308201BC A0030201 02020101 300D0609 2A864886 F70D0101 04050030 
+  30312E30 2C060355 04031325 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 33333034 32383136 30301E17 0D393330 33303130 30303133 
+  375A170D 32303031 30313030 30303030 5A303031 2E302C06 03550403 1325494F 
+  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3333 30343238 
+  31363030 819F300D 06092A86 4886F70D 01010105 0003818D 00308189 02818100 
+  C30613AB A17D3F98 BE62DC23 9AC53637 CA535CAE B8BCA854 FC572168 8F71E511 
+  D830A59E 86A4B1B7 2A2DBB6C D3F12C8A 00D8B887 B375E467 747F74AB B0C1FC7B 
+  0EDC9B6A 860E8784 D97FA020 32D84490 D0E34CB1 1970B0D9 54032E1B CCC91238 
+  0B39B42F 54544B76 63F985DD 9FFC6E8B 105B6685 300333B2 E634605F EA92D907 
+  02030100 01A37D30 7B300F06 03551D13 0101FF04 05300301 01FF3028 0603551D 
+  11042130 1F821D72 6A78792D 73657276 65722D73 77697463 682E7379 736C6162 
+  2E6F7267 301F0603 551D2304 18301680 14778229 206075FC 2E98976E 3DC565B0 
+  D3E57C31 AB301D06 03551D0E 04160414 77822920 6075FC2E 98976E3D C565B0D3 
+  E57C31AB 300D0609 2A864886 F70D0101 04050003 81810043 26CC3AC5 7EE96DFE 
+  3EEE3457 A05428D7 9C8D2871 8D8EEF36 0B236249 37BB1997 BD5D30B6 25CBD011 
+  302A8C2B A8613F1C 42154B6F 8B9D738C 3E7B44FA 1DEF24BA F734888F 1A9B92E5 
+  EF65D656 69557E6F B341E4A0 9753C2CF 08A5373B 36BC7F5E C0A181EB B69DBE7A 
+  26B50346 48E167AE 6E38C49F 6FFCF4B2 FEBB647B 47B3F1
+  quit
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!         
+!
+!
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+!
+interface GigabitEthernet0/1
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/2
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/3
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/4
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/5
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/6
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/7
+ switchport access vlan 37
+ switchport mode access
+!         
+interface GigabitEthernet0/8
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/9
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/10
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/11
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/12
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/13
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/14
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/15
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/16
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/17
+!
+interface GigabitEthernet0/18
+!
+interface GigabitEthernet0/19
+!
+interface GigabitEthernet0/20
+!
+interface GigabitEthernet0/21
+!
+interface GigabitEthernet0/22
+!
+interface GigabitEthernet0/23
+ switchport trunk encapsulation dot1q
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/24
+ switchport trunk encapsulation dot1q
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/25
+!
+interface GigabitEthernet0/26
+!
+interface GigabitEthernet0/27
+!
+interface GigabitEthernet0/28
+!
+interface Vlan1
+ ip address 192.168.39.2 255.255.255.0
+!
+interface Vlan37
+ no ip address
+!
+interface Vlan38
+ no ip address
+!
+ip default-gateway 192.168.37.1
+ip classless
+ip http server
+ip http secure-server
+!
+!
+!
+control-plane
+!
+!
+line con 0
+line vty 0 4
+ transport input ssh
+line vty 5 15
+!
+end

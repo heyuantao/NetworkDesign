@@ -1,0 +1,265 @@
+Building configuration...
+
+Current configuration : 6484 bytes
+!
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+no service password-encryption
+!
+hostname rjxy-core
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$2sOW$U9.nSpYSPCpEjDzXt7gJy/
+!
+username admin privilege 15 secret 5 $1$4OHV$MY8/92ZRNLvRaNbv6FGYM/
+no aaa new-model
+system mtu routing 1500
+ip subnet-zero
+ip routing
+ip domain-name test.com
+ip dhcp relay information option
+ip dhcp relay information trust-all
+!
+!
+!
+crypto pki trustpoint TP-self-signed-328606976
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-328606976
+ revocation-check none
+ rsakeypair TP-self-signed-328606976
+!
+!
+crypto pki certificate chain TP-self-signed-328606976
+ certificate self-signed 01
+  30820248 308201B1 A0030201 02020101 300D0609 2A864886 F70D0101 04050030 
+  30312E30 2C060355 04031325 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 33323836 30363937 36301E17 0D393330 33303130 30303134 
+  335A170D 32303031 30313030 30303030 5A303031 2E302C06 03550403 1325494F 
+  532D5365 6C662D53 69676E65 642D4365 72746966 69636174 652D3332 38363036 
+  39373630 819F300D 06092A86 4886F70D 01010105 0003818D 00308189 02818100 
+  EA06D73A FFF0D559 E8F189F1 0802A30A CCCBC14B 4AD4C0A7 2A6E1E08 A9196A62 
+  65690141 D7DA5A18 568AA071 35FD6925 D3E71F77 7DCA9C9B 3CE7B465 53D3C702 
+  7B8F835A 327692A3 5B8AA9AD F9068665 1F698A64 6960F0C7 A5F7307A 7EDB7759 
+  64C769ED 1E37D2F4 597F8295 BC0E5F37 F6236AC5 A1808337 84166563 5EC7C04D 
+  02030100 01A37230 70300F06 03551D13 0101FF04 05300301 01FF301D 0603551D 
+  11041630 14821272 6A78792D 636F7265 2E746573 742E636F 6D301F06 03551D23 
+  04183016 8014F550 ED8256B5 8AC0AF1B 327536B7 8227F1B4 812A301D 0603551D 
+  0E041604 14F550ED 8256B58A C0AF1B32 7536B782 27F1B481 2A300D06 092A8648 
+  86F70D01 01040500 03818100 2CA94CA7 84B44C52 79C3889C 50616877 5BCD80F6 
+  71EDA427 E9458C40 74C26BD9 B39509E2 F187A3C7 33A6EA85 FAC1F123 0A19B682 
+  7050CD02 8D9BA7E7 0300FF62 BA3A11C3 A42A06E0 7ED8FA33 DAB30858 A3518E14 
+  DC3EC32E C2AE64DD 03ED1413 86B42E9B 40499F1B 39EDD801 6492BBF7 4269892F 
+  BCFB8D03 7F3A2197 6238705B
+  quit
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh authentication-retries 4
+ip ssh version 2
+!         
+!
+!
+interface Port-channel1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel2
+ switchport trunk encapsulation dot1q
+!
+interface GigabitEthernet0/1
+ switchport access vlan 301
+ switchport mode access
+!
+interface GigabitEthernet0/2
+ switchport access vlan 302
+ switchport mode access
+!
+interface GigabitEthernet0/3
+ switchport access vlan 308
+ switchport mode access
+!
+interface GigabitEthernet0/4
+ switchport access vlan 406
+ switchport mode access
+!
+interface GigabitEthernet0/5
+ switchport access vlan 408
+ switchport mode access
+!
+interface GigabitEthernet0/6
+ switchport access vlan 410
+ switchport mode access
+ speed 1000
+ duplex full
+!
+interface GigabitEthernet0/7
+ switchport access vlan 414
+ switchport mode access
+!
+interface GigabitEthernet0/8
+ switchport access vlan 415
+ switchport mode access
+!
+interface GigabitEthernet0/9
+ switchport access vlan 301
+ switchport mode access
+!
+interface GigabitEthernet0/10
+!
+interface GigabitEthernet0/11
+!
+interface GigabitEthernet0/12
+!
+interface GigabitEthernet0/13
+ switchport access vlan 406
+ switchport mode access
+!
+interface GigabitEthernet0/14
+ switchport access vlan 37
+ switchport mode access
+!
+interface GigabitEthernet0/15
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/16
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/17
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/18
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/19
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/20
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/21
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/22
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/23
+ switchport trunk encapsulation dot1q
+ channel-group 2 mode active
+!
+interface GigabitEthernet0/24
+ switchport trunk encapsulation dot1q
+ channel-group 2 mode active
+!
+interface GigabitEthernet0/25
+!
+interface GigabitEthernet0/26
+!
+interface GigabitEthernet0/27
+!
+interface GigabitEthernet0/28
+!
+interface Vlan1
+ ip address 192.168.39.1 255.255.255.0
+ ip helper-address 192.168.20.14
+ ip helper-address 192.168.37.14
+!
+interface Vlan37
+ ip address 192.168.37.1 255.255.255.0
+ ip helper-address 192.168.20.14
+ ip helper-address 192.168.37.14
+!
+interface Vlan301
+ ip address 192.168.38.1 255.255.255.0
+ ip helper-address 192.168.20.14
+ ip helper-address 192.168.37.14
+!
+interface Vlan308
+ ip address 192.168.49.1 255.255.255.0
+ ip helper-address 192.168.20.14
+ ip helper-address 192.168.37.14
+!
+interface Vlan406
+ ip address 192.168.50.1 255.255.255.0
+ ip helper-address 192.168.20.14
+ ip helper-address 192.168.37.14
+!         
+interface Vlan408
+ ip address 192.168.51.1 255.255.255.0
+ ip helper-address 192.168.20.14
+ ip helper-address 192.168.37.14
+!
+interface Vlan410
+ ip address 192.168.52.1 255.255.255.0
+ ip helper-address 192.168.20.14
+ ip helper-address 192.168.37.14
+!
+interface Vlan414
+ ip address 192.168.53.1 255.255.255.0
+ ip helper-address 192.168.20.14
+ ip helper-address 192.168.37.14
+!
+interface Vlan415
+ ip address 192.168.54.1 255.255.255.0
+ ip helper-address 192.168.20.14
+ ip helper-address 192.168.37.14
+!
+router ospf 1
+ router-id 1.1.1.1
+ log-adjacency-changes
+ network 192.168.37.0 0.0.0.255 area 0
+ network 192.168.38.0 0.0.0.255 area 0
+ network 192.168.39.0 0.0.0.255 area 0
+ network 192.168.49.0 0.0.0.255 area 0
+ network 192.168.50.0 0.0.0.255 area 0
+ network 192.168.51.0 0.0.0.255 area 0
+ network 192.168.52.0 0.0.0.255 area 0
+ network 192.168.53.0 0.0.0.255 area 0
+ network 192.168.54.0 0.0.0.255 area 0
+!
+router bgp 20
+ no synchronization
+ bgp log-neighbor-changes
+ neighbor 192.168.50.3 remote-as 20
+ neighbor 192.168.50.3 next-hop-self
+ no auto-summary
+!
+ip classless
+ip http server
+ip http secure-server
+!
+!
+!
+control-plane
+!
+!
+line con 0
+line vty 0 4
+ privilege level 15
+ password 19831122
+ login local
+ transport input ssh
+line vty 5 15
+ login
+!
+end
